@@ -19,6 +19,8 @@ static NSString *ID = @"xunlu";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+//    NSLog(@"%s", __func__);
+    
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:ID];
 }
 
