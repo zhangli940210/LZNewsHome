@@ -6,13 +6,7 @@
 //  Copyright © 2016年 m14a.cn. All rights reserved.
 //
 
-#import "ViewController.h"
-#import "LZLuFeiViewController.h"
-#import "LZSuoLongViewController.h"
-#import "LZXiangJiViewController.h"
-#import "LZNaMeiTableViewController.h"
-#import "LZLuoBinTableViewController.h"
-#import "LZXunLuTableViewController.h"
+#import "LZViewController.h"
 
 #define LZScreenW [UIScreen mainScreen].bounds.size.width
 #define LZScreenH [UIScreen mainScreen].bounds.size.height
@@ -22,7 +16,7 @@
 // 随机色
 #define LZRandomColor LZColor(arc4random_uniform(256), arc4random_uniform(256),arc4random_uniform(256))
 
-@interface ViewController () <UIScrollViewDelegate>
+@interface LZViewController () <UIScrollViewDelegate>
 
 /** titleScrollView*/
 @property (nonatomic, weak) UIScrollView *titleScrollView;
@@ -33,10 +27,11 @@
 @property (nonatomic, weak) UIButton *selectedButton;
 /** 装门用来存按钮的,纯净*/
 @property (nonatomic ,strong) NSMutableArray *titleButtons;
-
+/** 是否初始化*/
+@property (nonatomic, assign) BOOL isInitial;
 @end
 
-@implementation ViewController
+@implementation LZViewController
 
 #pragma mark - 懒加载
 - (NSMutableArray *)titleButtons
@@ -54,12 +49,20 @@
     [self setupTitleScrollView];
     // 2.添加内容滚动视图
     [self setupContentScrollView];
-    // 3.添加所有子控制器
-    [self setupAllChildViewController];
-    // 4.设置所有标题
-    [self setupAllTitleButton];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (_isInitial == NO) {
+        
+        // 4.设置所有标题
+        [self setupAllTitleButton];
+        _isInitial = YES;
+    }
 }
 
 // 1.添加标题滚动视图
@@ -107,33 +110,6 @@
     _contentScrollView = contentScrollView;
 }
 
-// 3.添加所有子控制器
-- (void)setupAllChildViewController
-{
-    LZLuFeiViewController *lufei = [[LZLuFeiViewController alloc] init];
-    lufei.title = @"路飞";
-    [self addChildViewController:lufei];
-    
-    LZSuoLongViewController *suolong = [[LZSuoLongViewController alloc] init];
-    suolong.title = @"索隆";
-    [self addChildViewController:suolong];
-    
-    LZXiangJiViewController *xiangji = [[LZXiangJiViewController alloc] init];
-    xiangji.title = @"香吉";
-    [self addChildViewController:xiangji];
-    
-    LZNaMeiTableViewController *namei = [[LZNaMeiTableViewController alloc] init];
-    namei.title = @"娜美";
-    [self addChildViewController:namei];
-    
-    LZLuoBinTableViewController *luobin = [[LZLuoBinTableViewController alloc] init];
-    luobin.title = @"罗宾";
-    [self addChildViewController:luobin];
-    
-    LZXunLuTableViewController *xunlu = [[LZXunLuTableViewController alloc] init];
-    xunlu.title = @"驯鹿";
-    [self addChildViewController:xunlu];
-}
 
 // 4.设置所有标题
 - (void)setupAllTitleButton
@@ -270,7 +246,7 @@
     [self.selectedButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     // 1.1.2恢复上一次按钮的大小
     self.selectedButton.transform = CGAffineTransformIdentity;
-    NSLog(@"love--%@", NSStringFromCGAffineTransform(self.selectedButton.transform));
+//    NSLog(@"love--%@", NSStringFromCGAffineTransform(self.selectedButton.transform));
     
     // 1.2设置最新一次按钮的文字颜色
     [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
@@ -294,7 +270,7 @@
     
     // 标题缩放 -> 如何让标题缩放 改形变
     button.transform = CGAffineTransformMakeScale(1.3, 1.3);
-    NSLog(@"love11--%@", NSStringFromCGAffineTransform(button.transform));
+//    NSLog(@"love11--%@", NSStringFromCGAffineTransform(button.transform));
     
     // 1.3保存这次操作
     self.selectedButton = button;
